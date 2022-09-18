@@ -1,0 +1,30 @@
+.itemList {
+    font-size: 1.1rem;
+}
+
+.itemList tr {
+    background-color: var(--secondary-color-hover);
+
+}
+
+.itemList th {
+    background-color: var(--secondary-color);
+    text-align: left;
+    padding: .2em 1em;
+}
+
+.head__code {
+
+}
+.head__name{
+    width: 32em;
+}
+.head__price{
+    width: 6em;
+}
+.head__amount{
+
+}
+.head__total{
+    width: 7em;
+}

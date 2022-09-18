@@ -1,0 +1,53 @@
+.item {
+
+}
+
+.item td {
+    text-align: left;
+    padding: .2em 1em;
+
+
+}
+.item__name{
+    width: 32em;
+}
+.item__price{
+    min-width: 6em;
+    letter-spacing: 1px;
+}
+.item__total{
+    min-width: 7em;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+.item__amount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    align-self: center;
+}
+
+.amount-buttons {
+    display: flex;
+    gap: .3em;
+    height: 100%;
+}
+
+.amount-button {
+    border: none;
+    color: var(--text-color-fff);
+    background-color: var(--secondary-color);
+    padding: .2em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color .1s ease-in;
+}
+
+.plus:hover {
+    background-color: #0e6b0e;
+}
+
+.minus:hover {
+    background-color: #a41919;
+}
