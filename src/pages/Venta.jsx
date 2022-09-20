@@ -12,8 +12,12 @@ const Venta = () => {
         seller: "VENDEDOR",
         items: [],
         total: 0,
+        discount: 0,
+        paymentMethod: "Efectivo",
+        document: "Boleta",
         transaction: "Venta"
     })
+    const [isDiscountApplied, setIsDiscountApplied] = useState(false)
 
     const [inventory, setInventory] = useState(ProductsData)
 
@@ -49,7 +53,6 @@ const Venta = () => {
 
     function setTotal() {
         const sum = productsList.reduce((a, c) => a + c.amount * c.precio, 0)
-        console.log("SUM? " + sum)
         setVenta(prevState => (
             {
                 ...prevState,
@@ -58,43 +61,82 @@ const Venta = () => {
         ))
     }
 
+    function applyDiscount() {
+        setIsDiscountApplied(true)
+        setVenta(prevState => (
+            {
+                ...prevState,
+                discount: Math.ceil(prevState.total * 0.25)
+            }
+        ))
+    }
+
+    function removeDiscount() {
+        setIsDiscountApplied(false)
+        setVenta(prevState => (
+            {
+                ...prevState,
+                discount: 0
+            }
+        ))
+    }
+
 
     useEffect(() => {
         setTotal()
+        setVenta(prevState => (
+            {
+                ...prevState,
+                items: productsList
+            }
+        ))
+        if (isDiscountApplied) applyDiscount()
+
     }, [productsList]);
 
 
-    //*----------------------------
+    useEffect(() => {
+        console.log(venta)
+    },);
 
 
     return (
         <div className="main-container">
-            <h1>Nueva Venta</h1>
-            <CodeReader addProduct={addProduct} inventory={inventory}/>
-            <ItemList addProduct={addProduct} removeProduct={removeProduct} productsList={productsList}
-                      getProductById={getProductById}/>
+            <div>
+                <h1>Nueva Venta</h1>
+                <CodeReader addProduct={addProduct} inventory={inventory}/>
+                <ItemList addProduct={addProduct} removeProduct={removeProduct} productsList={productsList}
+                          getProductById={getProductById}/>
+            </div>
 
 
             <div className="panel">
                 <div className="panel__options">
                     <div className="options">
-                        <div className="payment">
-                            <label htmlFor="debito">Débito</label>
-                            <input name="metodo-pago" id="debito" type="radio"/>
-                            <label htmlFor="credito">Crédito</label>
-                            <input name="metodo-pago" id="credito" type="radio"/>
-                            <label htmlFor="efectivo">Efectivo</label>
-                            <input name="metodo-pago" id="efectivo" type="radio"/>
+                        <div className="radio">
+                            <input className="radio__input" name="metodo-pago" id="debito" type="radio"/>
+                            <label className="radio__label" htmlFor="debito">Débito</label>
+                            <input className="radio__input" name="metodo-pago" id="credito" type="radio"/>
+                            <label className="radio__label" htmlFor="credito">Crédito</label>
+                            <input className="radio__input" name="metodo-pago" id="efectivo" type="radio"/>
+                            <label className="radio__label" htmlFor="efectivo">Efectivo</label>
+
                         </div>
-                        <div className="recipe">
-                            <label htmlFor="boleta">Boleta</label>
-                            <input name="tipo-boleta" id="boleta" type="radio"/>
-                            <label htmlFor="factura">Factura</label>
-                            <input name="tipo-boleta" id="factura" type="radio"/>
+                        <div className="radio">
+                            <input className="radio__input" name="tipo-boleta" id="boleta" type="radio"/>
+                            <label className="radio__label" htmlFor="boleta">Boleta</label>
+                            <input className="radio__input" name="tipo-boleta" id="factura" type="radio"/>
+                            <label className="radio__label" htmlFor="factura">Factura</label>
+
                         </div>
                     </div>
 
-                    <button className="btn">Aplicar Descuento <DiscountIcon fontSize={"small"}/></button>
+
+                    {!isDiscountApplied ?
+                        <button onClick={applyDiscount} className="btn">Aplicar Descuento <DiscountIcon
+                            fontSize={"small"}/></button> :
+                        <button onClick={removeDiscount} className="btn">Quitar Descuento <DiscountIcon
+                            fontSize={"small"}/></button>}
 
                 </div>
                 <div className="panel__results">
@@ -109,16 +151,13 @@ const Venta = () => {
                     </div>
                     <div className="result">
                         <h2>Descuento: </h2>
-                        <span className="panel-data">$0</span>
+                        <span className="panel-data">${venta.discount}</span>
                     </div>
                     <div className="result total">
                         <h1>TOTAL: </h1>
-                        <span className="panel-data big">${venta.total}</span>
+                        <span className="panel-data big">${venta.total - venta.discount}</span>
                     </div>
-
-
                 </div>
-
             </div>
 
         </div>

@@ -24,7 +24,7 @@ const ItemList = (props) => {
 
     return (
         <table className="itemList">
-
+            {/*need to add TBODY*/}
             <tr>
                 <th className="head__code">Código</th>
                 <th className="head__name">Nombre</th>
