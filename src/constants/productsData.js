@@ -31,6 +31,13 @@ const productsData = [
         name: "Disco De Pulir Diamantado Copa 4 1/2 (115mm) Doble Segmento",
         precio: 7011,
         stock: 99
+    },
+
+    {
+        id: 102,
+        name: "Hoja Sable Progresor Madera Construcción 150mm 5pzas Bosch",
+        precio: 23330,
+        stock: 99
     }
 
 

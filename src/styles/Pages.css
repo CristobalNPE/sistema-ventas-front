@@ -3,6 +3,9 @@
     padding: 2em;
     overflow-y: scroll;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 h1 {
@@ -18,8 +21,11 @@ h2 {
     display: flex;
     justify-content: space-between;
     padding-inline: 1em;
-    padding-top: 3em;
+    padding-top: 2em;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
+    gap: 2em;
+
+
 }
 
 .panel__options {
@@ -36,7 +42,7 @@ h2 {
 
 .panel__results {
 
-    width: 25em;
+    width: 22em;
     display: flex;
     flex-direction: column;
     gap: .5em;
@@ -81,6 +87,43 @@ h2 {
     display: flex;
     gap: .5em;
 }
-.btn:hover{
+
+.btn:hover {
     opacity: 1;
+}
+
+
+.radio {
+    display: inline-flex;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    width: fit-content;
+    user-select: none;
+}
+
+.radio__input {
+    display: none;
+}
+
+.radio__label {
+    padding: .8em 1em;
+    font-size: .85rem;
+    font-family: var(--font-primary);
+    color: var(--text-color-fff);
+    background-color: var(--secondary-color);
+    cursor: pointer;
+    transition: background 0.15s;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+}
+
+.radio__label:not(:last-of-type) {
+    border-right: 1px solid var(--primary-color);
+}
+
+.radio__input:checked + .radio__label {
+    background: #006b4b;
 }

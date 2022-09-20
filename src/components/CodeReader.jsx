@@ -16,11 +16,9 @@ const CodeReader = (props) => {
         if (exist) {
             props.addProduct(exist)
         }
+        setProductCode(``)
     }
 
-    useEffect(() => {
-        console.log("PRODUCT CODE: "+productCode)
-    }, [productCode]);
 
 
     return (
@@ -30,7 +28,7 @@ const CodeReader = (props) => {
                 autoFocus
                 onChange={handleChange}
                 value={productCode}
-
+                onKeyDown={(e) => e.key === 'Enter' && findProduct()}
                 id="productCode"
                 type="text"
             />
