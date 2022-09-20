@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/Pages.css';
 import CodeReader from '../components/CodeReader.jsx';
-
 import ProductsData from '../constants/productsData.js';
 import ItemList from '../components/ItemList.jsx';
 import DiscountIcon from '@mui/icons-material/Discount';
@@ -15,44 +14,65 @@ const Venta = () => {
         total: 0,
         transaction: "Venta"
     })
+
+    const [inventory, setInventory] = useState(ProductsData)
+
+    const [productsList, setProductsList] = useState([])
+
+    function getProductById(id) {
+        return inventory.find(p => p.id == id);
+    }
+
+    function addProduct(product) {
+        const exist = productsList.find(p => p.id === product.id)
+        if (exist) {
+            setProductsList(
+                productsList.map(prod => prod.id === product.id ? {...exist, amount: exist.amount + 1} : prod)
+            )
+        } else {
+            setProductsList([...productsList, {...product, amount: 1}])
+        }
+    }
+
+    function removeProduct(product) {
+        const exist = productsList.find(p => p.id === product.id)
+        if (exist.amount === 1) {
+            setProductsList(
+                productsList.filter(prod => prod.id !== product.id)
+            )
+        } else {
+            setProductsList(
+                productsList.map(prod => prod.id === product.id ? {...exist, amount: exist.amount - 1} : prod)
+            )
+        }
+    }
+
+    function setTotal() {
+        const sum = productsList.reduce((a, c) => a + c.amount * c.precio, 0)
+        console.log("SUM? " + sum)
+        setVenta(prevState => (
+            {
+                ...prevState,
+                total: sum
+            }
+        ))
+    }
+
+
+    useEffect(() => {
+        setTotal()
+    }, [productsList]);
+
+
     //*----------------------------
-    const [productCode, setProductCode] = useState();
-
-    function handleChange(event) {
-        const {name, value} = event.target
-        setProductCode(value)
-    }
-
-    function handleCode() {
-
-        const item = ProductsData.filter(i => i.id == productCode)
-        if (item.length === 0) return;
-
-        setVenta(prevState => ({
-            ...prevState,
-            items: [...prevState.items, item[0]] //Is not adding the very first item to the array!!!!
-        }))
-
-        console.log(venta)
-    }
-    //*----------------------------
-
-
-    function totalHandler(totalAmount) {
-        console.log("TOTAL AMOUNT: " + totalAmount)
-
-        setVenta(prevState => ({
-            ...prevState,
-            total: totalAmount
-        }))
-    }
 
 
     return (
         <div className="main-container">
             <h1>Nueva Venta</h1>
-            <CodeReader productCode={productCode} handleChange={handleChange} handleCode={() => handleCode()}/>
-            <ItemList items={venta.items} totalHandler={totalHandler}/>
+            <CodeReader addProduct={addProduct} inventory={inventory}/>
+            <ItemList addProduct={addProduct} removeProduct={removeProduct} productsList={productsList}
+                      getProductById={getProductById}/>
 
 
             <div className="panel">
@@ -80,12 +100,12 @@ const Venta = () => {
                 <div className="panel__results">
                     <div className="result">
                         <h2>Neto: </h2>
-                        <span className="panel-data">$10990</span>
+                        <span className="panel-data">${Math.ceil(venta.total - (venta.total * 0.19))}</span>
                     </div>
 
                     <div className="result">
                         <h2>IVA: </h2>
-                        <span className="panel-data">$1990</span>
+                        <span className="panel-data">${Math.ceil(venta.total * 0.19)}</span>
                     </div>
                     <div className="result">
                         <h2>Descuento: </h2>

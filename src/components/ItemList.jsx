@@ -1,26 +1,30 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/ItemList.css'
 import Item from '../components/Item.jsx'
 
 const ItemList = (props) => {
 
 
-    function itemsElements() {
-        return props.items.map(item => <Item key={item.id} id={item.id} name={item.name} price={item.precio}/>)
-    }
+    function itemsElements(){
+        return props.productsList.map(item =>(
+            <Item
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                price={item.precio}
+                stock={item.stock}
+                amount={item.amount}
 
-    useEffect(() => {
-        props.totalHandler(calculateTotal())
-    }, [props.items]);
-
-    function calculateTotal() {
-        let total= props.items.reduce((total, item) => (total += item.precio), 0);
-        console.log("Total: "+total)
-        return total;
+                addProduct={props.addProduct}
+                removeProduct={props.removeProduct}
+                getProductById={props.getProductById}
+            />
+        ))
     }
 
     return (
         <table className="itemList">
+
             <tr>
                 <th className="head__code">Código</th>
                 <th className="head__name">Nombre</th>
