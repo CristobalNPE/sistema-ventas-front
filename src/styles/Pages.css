@@ -91,6 +91,10 @@ h2 {
 .btn:hover {
     opacity: 1;
 }
+.btn-secondary {
+    border: 2px solid var(--secondary-color);
+    background-color: transparent;
+}
 
 
 .radio {
@@ -126,4 +130,29 @@ h2 {
 
 .radio__input:checked + .radio__label {
     background: #006b4b;
+}
+.input-text {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+}
+.input-text__label {
+    text-transform: uppercase;
+    min-width: 7em;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+}
+.input-text__input {
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: var(--text-color-fff);
+    font-family: var(--font-primary);
+    padding: .5em 1em;
+    letter-spacing: 1px;
+    width: 100%;
+}
+option{
+  font-family: var(--font-primary);
 }

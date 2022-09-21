@@ -4,6 +4,8 @@ import CodeReader from '../components/CodeReader.jsx';
 import ProductsData from '../constants/productsData.js';
 import ItemList from '../components/ItemList.jsx';
 import DiscountIcon from '@mui/icons-material/Discount';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import Modal from '../components/Modal.jsx'
 
 const Venta = () => {
 
@@ -17,6 +19,8 @@ const Venta = () => {
         document: "Boleta",
         transaction: "Venta"
     })
+    const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
+
     const [isDiscountApplied, setIsDiscountApplied] = useState(false)
 
     const [inventory, setInventory] = useState(ProductsData)
@@ -61,12 +65,16 @@ const Venta = () => {
         ))
     }
 
-    function applyDiscount() {
+    function showDiscountModal(){
+        setIsDiscountModalVisible(true)
+    }
+
+    function applyDiscount(discountAmount) {
         setIsDiscountApplied(true)
         setVenta(prevState => (
             {
                 ...prevState,
-                discount: Math.ceil(prevState.total * 0.25)
+                discount: discountAmount
             }
         ))
     }
@@ -133,10 +141,10 @@ const Venta = () => {
 
 
                     {!isDiscountApplied ?
-                        <button onClick={applyDiscount} className="btn">Aplicar Descuento <DiscountIcon
+                        <button onClick={showDiscountModal} className="btn">Aplicar Descuento <DiscountIcon
                             fontSize={"small"}/></button> :
-                        <button onClick={removeDiscount} className="btn">Quitar Descuento <DiscountIcon
-                            fontSize={"small"}/></button>}
+                        <button onClick={removeDiscount} className="btn">Quitar Descuento <CancelOutlinedIcon
+                            color={"error"}/></button>}
 
                 </div>
                 <div className="panel__results">
@@ -159,6 +167,14 @@ const Venta = () => {
                     </div>
                 </div>
             </div>
+
+            <Modal
+                total={venta.total}
+                applyDiscount={applyDiscount}
+
+                isDiscountModalVisible={isDiscountModalVisible}
+                setIsDiscountModalVisible={setIsDiscountModalVisible}
+            />
 
         </div>
     );
