@@ -1,28 +1,51 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/Modal.css'
 
 const Modal = (props) => {
 
-    const [discountType, setDiscountType] = useState({
-        type: "porcentaje"
+    const [discount, setDiscount] = useState({
+        isPercentage: true,
+        amount: 0
     })
-    const [discountAmount, setDiscountAmount] = useState(0)
-    const [discountPercent, setDiscountPercent] = useState(0)
+
 
     function handleDiscountType(event) {
         const {value} = event.target
-        setDiscountType({type: value})
+        setDiscount(
+            {
+                isPercentage: value === "porcentaje",
+                amount: 0
+            }
+        )
     }
 
-    function handleChange(event) {
+    function handleDiscountAmount(event) {
         const {value} = event.target
-        if (discountType.type === "monto-fijo") {
-            setDiscountAmount(value)
+        if (!discount.isPercentage) {
+            const dscAmount = value > props.total ? props.total : value
+
+            setDiscount(prevState => (
+                {
+                    ...prevState,
+                    amount: dscAmount
+                }
+            ))
         } else {
-            setDiscountPercent(value)
-            setDiscountAmount(Math.ceil(((props.total * value) / 100)))
+            setDiscount(prevState => (
+                {
+                    ...prevState,
+                    amount: value
+                }
+            ))
         }
     }
+
+    useEffect(() => {
+        if (props.isDiscountApplied) {
+            props.applyDiscount(discount)
+        }
+    }, [props.venta.total]);
+
 
     return (
         <div className={`modal ${!props.isDiscountModalVisible && `hidden`}`}>
@@ -31,7 +54,7 @@ const Modal = (props) => {
                 <input
                     onChange={handleDiscountType}
                     value="porcentaje"
-                    checked={discountType.type === "porcentaje"}
+                    checked={discount.isPercentage}
                     className="radio__input"
                     name="discount-type"
                     id="porcentaje"
@@ -42,7 +65,7 @@ const Modal = (props) => {
                 <input
                     onChange={handleDiscountType}
                     value="monto-fijo"
-                    checked={discountType.type === "monto-fijo"}
+                    checked={!discount.isPercentage}
                     className="radio__input"
                     name="discount-type"
                     id="monto-fijo"
@@ -51,7 +74,7 @@ const Modal = (props) => {
                 <label className="radio__label" htmlFor="monto-fijo">Monto Fijo</label>
             </div>
 
-            {discountType.type === "monto-fijo" ?
+            {!discount.isPercentage ?
                 <div className="input-text">
                     <label className="input-text__label" htmlFor="monto">Monto:</label>
                     <input
@@ -59,8 +82,8 @@ const Modal = (props) => {
                         type="text"
                         id="monto"
                         name="discountAmount"
-                        value={discountAmount}
-                        onChange={handleChange}
+                        value={discount.amount}
+                        onChange={handleDiscountAmount}
                     />
                 </div> :
                 <div className="input-text">
@@ -69,8 +92,8 @@ const Modal = (props) => {
                         className="input-text__input"
                         id="porcentaje"
                         name="porcentaje"
-                        value={discountPercent}
-                        onChange={handleChange}
+                        value={discount.amount}
+                        onChange={handleDiscountAmount}
                     >
                         <option value="5">5%</option>
                         <option value="10">10%</option>
@@ -80,15 +103,16 @@ const Modal = (props) => {
                         <option value="50">50%</option>
                     </select>
                 </div>}
-            {/*<h2>Discount(test): ${discountAmount}</h2>*/}
-            <h2>Total con descuento: ${props.total - discountAmount}</h2>
+            <h2>Total con descuento:
+                ${props.total - (discount.isPercentage ? Math.ceil(((props.total * discount.amount) / 100)) : discount.amount)}</h2>
 
 
             <div className="buttons">
                 <button onClick={() => props.setIsDiscountModalVisible(false)} className="btn btn-secondary">Descartar
                 </button>
-                <button onClick={() => props.applyDiscount(discountAmount, props.setIsDiscountModalVisible(false))}
-                        className="btn">Aplicar
+                <button
+                    onClick={() => props.applyDiscount(discount, props.setIsDiscountApplied(true), props.setIsDiscountModalVisible(false))}
+                    className="btn">Aplicar
                 </button>
             </div>
         </div>

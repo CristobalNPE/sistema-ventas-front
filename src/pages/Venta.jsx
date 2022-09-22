@@ -65,18 +65,30 @@ const Venta = () => {
         ))
     }
 
-    function showDiscountModal(){
+    function showDiscountModal() {
         setIsDiscountModalVisible(true)
     }
 
-    function applyDiscount(discountAmount) {
-        setIsDiscountApplied(true)
-        setVenta(prevState => (
-            {
-                ...prevState,
-                discount: discountAmount
-            }
-        ))
+    function applyDiscount(discount) {
+
+        if (discount.isPercentage) {
+            const totalDiscount = Math.ceil(((venta.total * discount.amount) / 100))
+
+            setVenta(prevState => (
+                {
+                    ...prevState,
+                    discount: totalDiscount,
+                }
+            ))
+
+        } else {
+            setVenta(prevState => (
+                {
+                    ...prevState,
+                    discount: discount.amount,
+                }
+            ))
+        }
     }
 
     function removeDiscount() {
@@ -98,8 +110,6 @@ const Venta = () => {
                 items: productsList
             }
         ))
-        if (isDiscountApplied) applyDiscount()
-
     }, [productsList]);
 
 
@@ -171,6 +181,10 @@ const Venta = () => {
             <Modal
                 total={venta.total}
                 applyDiscount={applyDiscount}
+                venta={venta}
+                setVenta={setVenta}
+                isDiscountApplied={isDiscountApplied}
+                setIsDiscountApplied={setIsDiscountApplied}
 
                 isDiscountModalVisible={isDiscountModalVisible}
                 setIsDiscountModalVisible={setIsDiscountModalVisible}
