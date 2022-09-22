@@ -36,7 +36,7 @@ const CodeReader = (props) => {
                 className="btn"
                 onClick={findProduct}
             >
-                <SearchIcon fontSize={"small"}/>
+                <SearchIcon />
             </button>
         </div>
     );

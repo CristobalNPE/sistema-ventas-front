@@ -7,9 +7,10 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import Modal from '../components/Modal.jsx'
 
+
 const Venta = () => {
 
-    const [venta, setVenta] = useState({
+    const ventaInitialState = {
         id: 0,
         seller: "VENDEDOR",
         items: [],
@@ -18,7 +19,9 @@ const Venta = () => {
         paymentMethod: "Sin Definir",
         document: "Sin Definir",
         transaction: "Venta"
-    })
+    }
+
+    const [venta, setVenta] = useState(ventaInitialState)
     const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
     const [isDiscountApplied, setIsDiscountApplied] = useState(false)
 
@@ -111,7 +114,6 @@ const Venta = () => {
         ))
     }
 
-
     useEffect(() => {
         setTotal()
         setVenta(prevState => (
@@ -135,8 +137,6 @@ const Venta = () => {
                 <CodeReader addProduct={addProduct} inventory={inventory}/>
                 <ItemList addProduct={addProduct} removeProduct={removeProduct} productsList={productsList}
                           getProductById={getProductById}/>
-
-                {/*<button onClick={()=>alert(JSON.stringify(venta))} className="btn">Procesar Venta</button>*/}
             </div>
 
 
@@ -233,6 +233,23 @@ const Venta = () => {
                         <span className="panel-data big">${venta.total - venta.discount}</span>
                     </div>
                 </div>
+
+                <div className="panel__buttons">
+                    <button
+                        onClick={() => {
+                            setVenta(ventaInitialState);
+                            setProductsList([])
+                        }}
+                        className="btn btn-secondary">Cancelar Venta
+                    </button>
+
+                    <button className="btn btn-secondary">Descargar Cotización</button>
+
+                    <button onClick={() => alert(JSON.stringify(venta))}
+                            className="btn btn-important">Ingresar Venta
+                    </button>
+                </div>
+
             </div>
 
             <Modal

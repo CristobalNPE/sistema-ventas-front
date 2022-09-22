@@ -46,7 +46,7 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: .5em;
-
+    justify-content: space-between;
 
 }
 
@@ -65,14 +65,20 @@ h2 {
     padding: .2em .5em;
 }
 
+.panel__buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .total {
     background-color: var(--secondary-color-hover);
-    padding-block: .5em;
+    padding-block: .7em;
 }
 
 .btn {
     border: none;
-    padding: .5em 1em;
+    padding: .4em 1em;
     font-family: var(--font-primary);
     text-transform: uppercase;
     background-color: var(--secondary-color);
@@ -86,16 +92,25 @@ h2 {
     align-items: center;
     display: flex;
     gap: .5em;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.16);
 }
 
 .btn:hover {
     opacity: 1;
 }
+
 .btn-secondary {
     border: 2px solid var(--secondary-color);
     background-color: transparent;
 }
 
+.btn-important {
+    background-color: var(--color-ok);
+    padding: 1em;
+    font-weight: bold;
+
+}
 
 .radio {
     display: inline-flex;
@@ -129,19 +144,22 @@ h2 {
 }
 
 .radio__input:checked + .radio__label {
-    background: #006b4b;
+    background: var(--color-ok);
 }
+
 .input-text {
     display: flex;
     gap: 1em;
     align-items: center;
 }
+
 .input-text__label {
     text-transform: uppercase;
     min-width: 7em;
     letter-spacing: 1px;
     font-size: 1.1rem;
 }
+
 .input-text__input {
     background-color: var(--secondary-color);
     border: none;
@@ -153,6 +171,7 @@ h2 {
     letter-spacing: 1px;
     width: 100%;
 }
-option{
-  font-family: var(--font-primary);
+
+option {
+    font-family: var(--font-primary);
 }
