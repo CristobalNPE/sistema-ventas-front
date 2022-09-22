@@ -15,16 +15,14 @@ const Venta = () => {
         items: [],
         total: 0,
         discount: 0,
-        paymentMethod: "Efectivo",
-        document: "Boleta",
+        paymentMethod: "Sin Definir",
+        document: "Sin Definir",
         transaction: "Venta"
     })
     const [isDiscountModalVisible, setIsDiscountModalVisible] = useState(false)
-
     const [isDiscountApplied, setIsDiscountApplied] = useState(false)
 
     const [inventory, setInventory] = useState(ProductsData)
-
     const [productsList, setProductsList] = useState([])
 
     function getProductById(id) {
@@ -71,6 +69,7 @@ const Venta = () => {
 
     function applyDiscount(discount) {
 
+
         if (discount.isPercentage) {
             const totalDiscount = Math.ceil(((venta.total * discount.amount) / 100))
 
@@ -101,6 +100,17 @@ const Venta = () => {
         ))
     }
 
+    function handleChange(event) {
+        const {value, name} = event.target
+
+        setVenta(prevState => (
+            {
+                ...prevState,
+                [name]: value
+            }
+        ))
+    }
+
 
     useEffect(() => {
         setTotal()
@@ -125,6 +135,8 @@ const Venta = () => {
                 <CodeReader addProduct={addProduct} inventory={inventory}/>
                 <ItemList addProduct={addProduct} removeProduct={removeProduct} productsList={productsList}
                           getProductById={getProductById}/>
+
+                {/*<button onClick={()=>alert(JSON.stringify(venta))} className="btn">Procesar Venta</button>*/}
             </div>
 
 
@@ -132,19 +144,64 @@ const Venta = () => {
                 <div className="panel__options">
                     <div className="options">
                         <div className="radio">
-                            <input className="radio__input" name="metodo-pago" id="debito" type="radio"/>
-                            <label className="radio__label" htmlFor="debito">Débito</label>
-                            <input className="radio__input" name="metodo-pago" id="credito" type="radio"/>
-                            <label className="radio__label" htmlFor="credito">Crédito</label>
-                            <input className="radio__input" name="metodo-pago" id="efectivo" type="radio"/>
-                            <label className="radio__label" htmlFor="efectivo">Efectivo</label>
+                            <input
+                                className="radio__input"
+                                name="paymentMethod"
+                                id="Débito"
+                                type="radio"
+                                onChange={handleChange}
+                                checked={venta.paymentMethod === "Débito"}
+                                value="Débito"
+                            />
+                            <label className="radio__label" htmlFor="Débito">Débito</label>
+
+                            <input
+                                className="radio__input"
+                                name="paymentMethod"
+                                id="Crédito"
+                                type="radio"
+                                onChange={handleChange}
+                                checked={venta.paymentMethod === "Crédito"}
+                                value="Crédito"
+                            />
+                            <label className="radio__label" htmlFor="Crédito">Crédito</label>
+
+                            <input
+                                className="radio__input"
+                                name="paymentMethod"
+                                id="Efectivo"
+                                type="radio"
+                                onChange={handleChange}
+                                checked={venta.paymentMethod === "Efectivo"}
+                                value="Efectivo"
+                            />
+                            <label className="radio__label" htmlFor="Efectivo">Efectivo</label>
 
                         </div>
+
+
                         <div className="radio">
-                            <input className="radio__input" name="tipo-boleta" id="boleta" type="radio"/>
-                            <label className="radio__label" htmlFor="boleta">Boleta</label>
-                            <input className="radio__input" name="tipo-boleta" id="factura" type="radio"/>
-                            <label className="radio__label" htmlFor="factura">Factura</label>
+                            <input
+                                className="radio__input"
+                                name="document"
+                                id="Boleta"
+                                type="radio"
+                                onChange={handleChange}
+                                checked={venta.document === "Boleta"}
+                                value="Boleta"
+                            />
+                            <label className="radio__label" htmlFor="Boleta">Boleta</label>
+
+                            <input
+                                className="radio__input"
+                                name="document"
+                                id="Factura"
+                                type="radio"
+                                onChange={handleChange}
+                                checked={venta.document === "Factura"}
+                                value="Factura"
+                            />
+                            <label className="radio__label" htmlFor="Factura">Factura</label>
 
                         </div>
                     </div>

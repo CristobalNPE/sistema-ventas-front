@@ -8,6 +8,20 @@ const Modal = (props) => {
         amount: 0
     })
 
+    function resetDiscount() {
+        setDiscount(prevState => (
+            {
+                isPercentage: true,
+                amount: 0
+            }
+        ))
+        props.setVenta(prevState => (
+            {
+                ...prevState,
+                discount: 0
+            }
+        ))
+    }
 
     function handleDiscountType(event) {
         const {value} = event.target
@@ -21,15 +35,19 @@ const Modal = (props) => {
 
     function handleDiscountAmount(event) {
         const {value} = event.target
-        if (!discount.isPercentage) {
-            const dscAmount = value > props.total ? props.total : value
+        const re = /^[\d\b]+$/ //RegEx to check if input is a number
 
-            setDiscount(prevState => (
-                {
-                    ...prevState,
-                    amount: dscAmount
-                }
-            ))
+        if (!discount.isPercentage) {
+            if (value === 0 || re.test(value)) {
+                const dscAmount = parseInt(value > props.total ? props.total : value, 10)
+                setDiscount(prevState => (
+                    {
+                        ...prevState,
+                        amount: dscAmount
+                    }
+                ))
+            }
+
         } else {
             setDiscount(prevState => (
                 {
@@ -46,6 +64,12 @@ const Modal = (props) => {
         }
     }, [props.venta.total]);
 
+    useEffect(() => {
+        if ((props.venta.total - props.venta.discount) <= 0) {
+            resetDiscount()
+            props.setIsDiscountApplied(false)
+        }
+    }, [props.venta.total, props.venta.items])
 
     return (
         <div className={`modal ${!props.isDiscountModalVisible && `hidden`}`}>
@@ -79,7 +103,7 @@ const Modal = (props) => {
                     <label className="input-text__label" htmlFor="monto">Monto:</label>
                     <input
                         className="input-text__input"
-                        type="text"
+                        type="number"
                         id="monto"
                         name="discountAmount"
                         value={discount.amount}
@@ -95,6 +119,7 @@ const Modal = (props) => {
                         value={discount.amount}
                         onChange={handleDiscountAmount}
                     >
+                        <option selected disabled value="0">-Seleccione-</option>
                         <option value="5">5%</option>
                         <option value="10">10%</option>
                         <option value="15">15%</option>
